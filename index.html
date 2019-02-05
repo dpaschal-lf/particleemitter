@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+.glitter{
+  border: 3px solid black;
+  height: 2vh;
+}
+.particle{
+	background-image: url(https://orig00.deviantart.net/7001/f/2009/065/1/9/sparkle_png_by_pvs_by_pixievamp_stock.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: .5;
+}
+</style>
+</head>
+<body>
+<div class="glitter">
+  
+</div>
+
+</body>
+<script type="text/javascript">
+function makeParticlesOnElement(element){
+  var targetElement = document.querySelector('body');
+  var bounds = element.getBoundingClientRect();
+  
+  function makeEmitter(options){
+    var defaultOptions = {
+      x: 0,
+      y: 0,
+      emmiter_duration: 1000,
+      totalParticles: 1000,
+      percentChance: .5,
+      animationTime: 10,
+      chanceTime: 20,
+      rotation_min: 0,
+      rotation_max: 0,
+      particle_life: 3000,
+      color: {r:255, g:255, b:255, o:.5},
+      velocity: 10, //pixels per second
+      gravity: 0.2,
+      start_angle: 0,
+      end_angle: 90,
+      height: 3,
+      width: 3,
+      opacity_start: 1, //opacity at start of run
+      opacity_end: 0,  //opacity at end of run
+      fade_start_time: 0, //% of time to start fading
+      fade_end_time: 1,  //% of time to end fading
+      birth_scale: 0, //how big to start at
+      maturity_scale: 1, //how big to be when it matures
+      maturity_time_end: .1, //what percent of particle time is it considered to be mature
+      death_scale: 1.2, //how big to be by the time it terminates
+      death_time_start: .8 //what percentage of time to start its death growth
+    }
+    for(var i in defaultOptions){
+      if(options[i]===undefined){
+        options[i] = defaultOptions[i];
+      }
+    }
+    options.particlesRemaining = options.totalParticles;
+    function checkToMakeParticle(options){
+    	var chance = Math.random();
+    	if(chance < options.percentChance){
+		    var angle = Math.random() * (options.end_angle - options.start_angle) + options.start_angle;
+		    var particle= makeParticle({
+		      x: options.x,
+		      y: options.y,
+		      color: options.color,
+		      animationTime: options.animationTime,
+		      angle: angle,
+		      velocity: options.velocity,
+		      velocity_per_frame: options.velocity / (1000 / options.animationTime),
+		      particle_life: options.particle_life,
+		      gravity: options.gravity, 
+		      height: options.height, 
+		      width: options.width, 
+		      rotation_min: options.rotation_min,
+		      rotation_max: options.rotation_max,
+		      opacity_start: options.opacity_start, 
+		      opacity_end: options.opacity_end,  
+		      fade_start_time: options.fade_start_time,
+		      fade_end_time: options.fade_end_time,
+		      maturity_scale: options.maturity_scale,
+		      maturity_time_end: options.maturity_time_end,
+		      death_scale: options.death_scale,
+		      death_time_start: options.death_time_start
+		    });
+
+		    targetElement.insertBefore(particle,targetElement.childNodes[0]);
+		    options.particlesRemaining--;
+
+		}
+	    if(options.particlesRemaining>0){
+	    	setTimeout(checkToMakeParticle,options.chanceTime, options);
+	    }
+    }
+    
+    setTimeout(checkToMakeParticle, options.chanceTime, options);
+    function makeParticle(params){
+      var particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.position = 'fixed';
+      particle.style.left = params.x + 'px';
+      particle.style.top = params.y + 'px';
+      //particle.style.backgroundColor = 'rgba('+params.color.r+','+params.color.g+','+params.color.b+','+params.color.o+')';
+      particle.style.width = params.width+'px';
+      particle.style.height = params.height+'px';
+      var rotationDegrees = Math.random()*360;
+      particle.style.transform = 'rotate3D(0,0,1,'+rotationDegrees+'deg)';
+      var currentOpacity = particle.style.opacity || 1;
+      var currentX = params.x;
+      var currentY = params.y;
+      var radians = params.angle * (Math.PI/180);
+      debugger;
+      var xVelocity = Math.cos(params.angle) * params.velocity_per_frame;
+      var yVelocity = Math.sin(params.angle) * params.velocity_per_frame;
+      var lifeTime = params.particle_life;
+      var rotation_delta = Math.random()*(params.rotation_max - params.rotation_min);
+     /*
+          opacity_start: .7, //opacity at start of run
+      opacity_end: 0,  //opacity at end of run
+      fade_start_time: .75 //% of time to start fading
+      fade_end_time: 1 
+      */
+      var animationTime = params.animationTime;
+      ;
+      var fade_start = lifeTime * params.fade_start_time;
+      var fade_end = lifeTime * params.fade_end_time;
+      var fade_time_difference = fade_end - fade_start;
+      debugger
+      var fade_delta = (params.opacity_start - params.opacity_end) / (fade_time_difference / animationTime) ;
+/*
+      birth_scale: 0, //how big to start at
+      maturity_scale: 1, //how big to be when it matures
+      maturity_time_end: .1, //what percent of particle time is it considered to be mature
+      death_scale: 1.2, //how big to be by the time it terminates
+      death_time_start: .8 //what percentage of time to start its death growth
+ */
+ 	  // var maturity_delta = params.maturity_scale - params.birth_scale;
+ 	  // var maturity_time = lifeTime * params.maturity_time_end;
+    //   var sizeDelta = maturity_delta / (lifeTime / maturity_time);
+    //   function stopMaturitySizeChange(){
+    //   	nextCheckTime = lifeTime * params.death_time_start;
+    //   	nextCheckAction = startDeathSizeChange;
+    //   }
+    //   function startDeathSizeChange(){
+
+    //   }
+    //   var nextCheckTime = lifeTime * params.maturity_time_end;
+    //   var nextCheckAction = stopMaturitySizeChange;
+      function animateParticle(){
+      	currentX += xVelocity;
+      	currentY += yVelocity;
+      	rotationDegrees += rotation_delta;
+        particle.style.left = currentX+'px';
+        particle.style.top = currentY+'px';
+        particle.style.transform = 'rotate3D(0,0,1,'+rotationDegrees+'deg)';
+        currentOpacity -= fade_delta;
+        particle.style.opacity = currentOpacity;
+        yVelocity += params.gravity;
+        lifeTime -= params.animationTime;
+        //if(lifeTime)
+        if(lifeTime>0){
+            setTimeout(animateParticle,params.animationTime);
+        } else {
+        	particle.parentNode.removeChild(particle);
+
+        }
+      }
+      setTimeout(animateParticle,params.animationTime);
+      return particle;
+    }
+    
+  }
+  makeEmitter({
+  	x: 1300, y: 300, 
+  	color:{r: 255, g: 0, b:0, o:1},  
+  	gravity: 0,height: 10, width: 10,
+  	velocity: 200,
+  	percentChance: .05,
+  	rotation_min: .05,
+  	rotation_max: 2, 
+  })
+  makeEmitter({
+    x: 300, y: 300, 
+    color:{r: 255, g: 0, b:0, o:1},  
+    gravity: .5,height: 10, width: 10,
+    velocity: 100,
+    percentChance: .05,
+    rotation_min: .05,
+    rotation_max: 2, 
+  })
+  
+}
+/*
+{
+  bottom: 148.70738220214844,
+  height: 140.71022033691406,
+  left: 7.997159004211426,
+  right: 380.1846618652344,
+  top: 7.997159004211426,
+  width: 372.1875
+}
+
+*/
+
+var emitter = makeParticlesOnElement(document.querySelector('.glitter'));
+makeParticlesOnElement(document.querySelector('.glitter'));
+
+</script>
+</html>
